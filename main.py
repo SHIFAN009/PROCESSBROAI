@@ -31,3 +31,6 @@ async def whatsapp_webhook(msg: Message):
 
     reply = response['choices'][0]['message']['content']
     return PlainTextResponse(content=reply)
+@app.get("/")
+async def root():
+    return {"message": "FlowMind is running ✅"}

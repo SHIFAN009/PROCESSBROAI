@@ -15,11 +15,10 @@ async def root():
 @app.post("/webhook", response_class=PlainTextResponse)
 async def webhook(
     Body: str = Form(...),
-    From: str = Form(...)
+    sender: str = Form(...)
 ):
-    print(f"📥 Message from {From}: {Body}")
+    print(f"📨 Message from {sender}: {Body}")
 
-    # Use OpenAI to generate a reply
     try:
         response = openai.ChatCompletion.create(
             model="gpt-4",
@@ -28,9 +27,9 @@ async def webhook(
                 {"role": "user", "content": Body}
             ]
         )
-
         reply = response.choices[0].message.content.strip()
     except Exception as e:
+        print("Error with OpenAI:", e)
         reply = "⚠️ Sorry, I couldn't generate a response right now."
 
     return reply
